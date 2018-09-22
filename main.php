@@ -2,6 +2,7 @@
 
 require 'vendor/autoload.php';
 
+use Intervention\Image\Image;
 use RicardoFiorani\Legofy\Pallete\Palettes;
 
 function main($image_path, $output_path = '', $size = null, $palette_mode = null, $dither = false)
@@ -41,8 +42,8 @@ function main($image_path, $output_path = '', $size = null, $palette_mode = null
 
     legofy_image($base_image, $brick_image, $output_path, $size, $palette_mode, $dither);
 
-    $base_image->close();
-    $brick_image->close();
+    $base_image->destroy();
+    $brick_image->destroy();
 
     print("Finished!");
 }
@@ -89,7 +90,7 @@ function endsWith($haystack, $needle)
 /**
  * Legofy an image
  */
-function legofy_image(\Intervention\Image\Image $base_image, $brick_image, $output_path, $size, $palette_mode, $dither)
+function legofy_image(Image $base_image, Image $brick_image, $output_path, $size, $palette_mode, $dither)
 {
     $new_size = get_new_size($base_image, $brick_image, $size);
     $base_image->resize($new_size[0], $new_size[1]);
@@ -105,7 +106,7 @@ function legofy_image(\Intervention\Image\Image $base_image, $brick_image, $outp
 /**
  * Returns a new size the first image should be so that the second one fits neatly in the longest axis
  */
-function get_new_size(\Intervention\Image\Image $base_image, $brick_image, $size = null)
+function get_new_size(Image $base_image, $brick_image, $size = null)
 {
     $new_size = [$base_image->getWidth(), $base_image->getHeight()];
 
@@ -204,10 +205,12 @@ function get_lego_palette($palette_mode)
 /**
  * Apply effects on the reduced image before Legofying
  */
-function apply_thumbnail_effects($image, $palette, $dither)
+function apply_thumbnail_effects(Image $image, $palette, $dither)
 {
-    $palette_image = Image::new("P", [1, 1]);
-    $palette_image . putpalette($palette);
+    $palette_image = \Intervention\Image\ImageManagerStatic::canvas(1, 1);
+    $palette_image->limitColors(256);
+
+//    $image->col
 
     return $image->im->convert("P",
         $dither ? Image::FLOYDSTEINBERG : Image::NONE,
