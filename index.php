@@ -3,14 +3,27 @@
 use Intervention\Image\Image;
 use Intervention\Image\ImageManagerStatic;
 
-require 'main.php';
-//var_dump(
-//main('flower.jpg')
-//);
+require 'vendor/autoload.php';
+
+error_reporting(E_ALL);
+ini_set("display_errors", "on");
+ini_set("max_execution_time", "60");
+
+$brick = $_GET['brick'] ?? null;
+$resolutionMultiplier = $_GET['res'] ?? 1;
+$useLegoPalette = (bool)($_GET['lego'] ?? 0);
+
+$legofy = new \RicardoFiorani\Legofy\Legofy($brick);
+
+$output = $legofy->convertToLego(getImageSource(), $resolutionMultiplier, $useLegoPalette);
+
+showImages(ImageManagerStatic::make(getImageSource()), null, $output);
+
+die();
 
 function getImageSource()
 {
-    $resource = isset($_GET['image']) ? $_GET['image'] : 'flower.jpg';
+    $resource = $_GET['image'] ?? __DIR__ . '/flower.jpg';
     $resourcePath = __DIR__ . '/temp/' . md5($resource);
 
     if (file_exists($resourcePath)) {
@@ -21,15 +34,6 @@ function getImageSource()
     file_put_contents($resourcePath, $downloaded);
 
     return $resourcePath;
-}
-
-function getLegoBrickColor(\Intervention\Image\Gd\Color $color): \Intervention\Image\Gd\Color
-{
-    $brickColor = \RicardoFiorani\Legofy\Pallete\Palettes::getClosest($color);
-
-    list($color->r, $color->g, $color->b) = $brickColor;
-
-    return $color;
 }
 
 function showImages(Image $image1, Image $image2 = null, Image $image3 = null)
@@ -48,100 +52,3 @@ function showImages(Image $image1, Image $image2 = null, Image $image3 = null)
 
     die($finalCanvas->response(null, 100));
 }
-
-
-error_reporting(E_ALL);
-ini_set("display_errors", "on");
-ini_set("max_execution_time", "60");
-
-$resolution = isset($_GET['res']) ? $_GET['res'] : 1;
-
-$brick = ImageManagerStatic::make('1x1.png');
-$brickColor = (clone $brick)
-    ->pixelate($brick->getWidth())
-    ->blur(50)
-    ->pickColor($brick->width() / 2, $brick->getHeight() / 2, 'obj');
-
-
-$useLegoPalette = isset($_GET['lego']) ? $_GET['lego'] : 0;
-
-$imageSource = getImageSource();
-$image = ImageManagerStatic::make($imageSource);
-
-$imageOriginalWidth = $image->width();
-$imageOriginalHeight = $image->height();
-
-$image->resize($image->getWidth() * $resolution, $image->getHeight() * $resolution);
-//die($image->response());
-
-$brickWidth = $brick->getWidth();
-$brickHeight = $brick->getHeight();
-
-//$image->blur(50);
-//$image->pixelate($brickWidth);
-
-$amountOfBricksX = round($image->getWidth() / $brickWidth);
-$amountOfBricksY = round($image->getHeight() / $brickHeight);
-
-
-//var_dump($amountOfBricksX, $amountOfBricksY);
-//die;
-
-$canvas = ImageManagerStatic::canvas($amountOfBricksX * $brickWidth, $amountOfBricksY * $brickHeight);
-//$canvas = ImageManagerStatic::canvas(1000, 1000);
-
-$image->resize($amountOfBricksX * $brickWidth, $amountOfBricksY * $brickHeight);
-
-foreach (range(0, $amountOfBricksX) as $x) {
-    foreach (range(0, $amountOfBricksY) as $y) {
-        $positionX = $x * $brickWidth;
-        $positionY = $y * $brickHeight;
-
-        if ($positionX == $image->getWidth()) {
-            $positionX--;
-        }
-
-        if ($positionY == $image->getHeight()) {
-            $positionY--;
-        }
-
-        $color = $image->pickColor($positionX, $positionY, 'object');
-
-        if ($useLegoPalette) {
-            $color = getLegoBrickColor($color);
-        }
-
-        $colorizedBrick = ImageManagerStatic::canvas($brickWidth, $brickHeight, $color->getHex())
-            ->insert((clone $brick)
-                ->colorize(
-                    ($color->r - $brickColor->r) / 2.55,
-                    ($color->g - $brickColor->g) / 2.55,
-                    ($color->b - $brickColor->b) / 2.55
-                )
-            );
-
-        //showImages($colorizedBrick, null, ImageManagerStatic::canvas($brickWidth, $brickHeight, $originalColor->getHex()));
-
-        $canvas->insert(
-            $colorizedBrick,
-            '',
-            ($x * $brickWidth) - $brickWidth,
-            ($y * $brickWidth) - $brickWidth
-        );
-    }
-}
-
-
-$original = ImageManagerStatic::make($imageSource);
-$canvas->resize($imageOriginalWidth, $imageOriginalHeight);
-
-showImages(
-    $original,
-    null,
-    //$image,
-    $canvas
-);
-
-//die($canvas->response());
-
-
