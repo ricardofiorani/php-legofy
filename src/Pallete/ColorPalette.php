@@ -284,6 +284,8 @@ class ColorPalette implements LegoPaletteInterface
 
         list($r, $g, $b) = $colorFound;
 
-        return $color->initFromRgb($r, $g, $b);
+        $color->initFromRgb($r, $g, $b);
+
+        return $color;
     }
 }

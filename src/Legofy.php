@@ -11,6 +11,7 @@ use RicardoFiorani\Legofy\Pallete\LegoPaletteInterface;
 class Legofy
 {
     private $brick;
+    private $brickAverageColor;
     private $palette;
 
     public function __construct($brickResource = null, LegoPaletteInterface $palette = null)
@@ -109,7 +110,11 @@ class Legofy
 
     private function getAverageBrickColor(): AbstractColor
     {
-        return (clone $this->getBrick())
+        if (false == is_null($this->brickAverageColor)) {
+            return $this->brickAverageColor;
+        }
+
+        return $this->brickAverageColor = (clone $this->getBrick())
             ->pixelate($this->getBrick()->getWidth())
             ->blur(50)
             ->pickColor($this->getBrick()->width() / 2, $this->getBrick()->getHeight() / 2, 'obj');
