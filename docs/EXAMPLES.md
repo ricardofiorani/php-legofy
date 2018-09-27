@@ -54,8 +54,6 @@ Output:
 > Please note that this implementation of color distance uses the [Euclidean method](https://en.wikipedia.org/wiki/Color_difference#Euclidean) so it might not be 100% precise for scientific purposes.
 
 
-
-
 [beer]: ../assets/examples/beer.jpg
 [lego-beer]: ../assets/examples/lego-beer.jpeg
 [1-5-lego-beer]: ../assets/examples/res-1-5-lego-beer.jpeg
