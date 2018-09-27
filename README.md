@@ -63,4 +63,4 @@ $output = $legofy->convertToLego($source, $resolutionMultiplier, $useLegoPalette
 echo $output->response();
 ```
 
-For more examples of usage please see [the usage examples on documentation](https://githubusercontent.com/ricardofiorani/php-legofy/master/docs/EXAMPLES.md)
+For more examples of usage please see [the usage examples on documentation](https://github.com/ricardofiorani/php-legofy/blob/master/docs/EXAMPLES.md)
