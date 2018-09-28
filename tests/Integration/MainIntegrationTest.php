@@ -15,8 +15,11 @@ class MainIntegrationTest extends TestCase
 
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
-        $dotenv = new Dotenv(__DIR__.'/../../');
-        $dotenv->load();
+        $envFile = __DIR__ . '/../../.env';
+        if (file_exists($envFile)) {
+            $dotenv = new Dotenv(dirname($envFile));
+            $dotenv->load();
+        }
 
         parent::__construct($name, $data, $dataName);
     }
