@@ -51,9 +51,6 @@ class Legofy
     {
         $image = ImageManagerStatic::make($resource);
 
-        $imageOriginalWidth = $image->width();
-        $imageOriginalHeight = $image->height();
-
         // Apply resolution multipler
         $image->resize(
             $image->getWidth() * $resolutionMultipler,
@@ -110,7 +107,7 @@ class Legofy
 
     private function getAverageBrickColor(): AbstractColor
     {
-        if (false == is_null($this->brickAverageColor)) {
+        if (false === is_null($this->brickAverageColor)) {
             return $this->brickAverageColor;
         }
 
@@ -130,7 +127,7 @@ class Legofy
         return ImageManagerStatic::canvas(
             $this->getBrick()->getWidth(),
             $this->getBrick()->getHeight(),
-            $color->getHex()
+            $color->getHex('')
         )->insert(
             (clone $this->getBrick())->colorize(
                 // Picked color subtracted by the average brick color to avoid the image getting brighter

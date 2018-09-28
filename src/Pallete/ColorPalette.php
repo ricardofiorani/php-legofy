@@ -268,11 +268,13 @@ class ColorPalette implements LegoPaletteInterface
     {
         $distances = [];
 
+        $colorArray = $color->getArray();
+
         foreach ($this->palette as $colorIdentifier => $colorSchema) {
             $distance =
-                abs($colorSchema[0] - $color->r) +
-                abs($colorSchema[1] - $color->g) +
-                abs($colorSchema[2] - $color->b);
+                abs($colorSchema[0] - $colorArray[0]) +
+                abs($colorSchema[1] - $colorArray[1]) +
+                abs($colorSchema[2] - $colorArray[2]);
 
             $distances[$distance] = [$colorSchema[0], $colorSchema[1], $colorSchema[2]];
         }

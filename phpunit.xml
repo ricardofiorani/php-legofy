@@ -13,9 +13,9 @@
         <testsuite name="PHP Legofy Integration Test Suite">
             <directory>tests/Integration</directory>
         </testsuite>
-        <!--testsuite name="PHP Cloudflare AMP Validator Unit Test Suite">
+        <testsuite name="PHP Legofy Unit Test Suite">
             <directory>tests/Unit</directory>
-        </testsuite-->
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist>
