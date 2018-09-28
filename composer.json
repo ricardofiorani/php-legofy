@@ -8,9 +8,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^7.2",
-        "vlucas/phpdotenv": "^2.5",
-        "spryker/code-sniffer": "^0.12.5",
-        "j0k3r/php-imgur-api-client": "^3.0"
+        "spryker/code-sniffer": "^0.12.5"
     },
     "autoload": {
         "psr-4": {
