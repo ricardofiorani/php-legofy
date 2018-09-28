@@ -4,3 +4,4 @@ vendor
 temp
 index.php
 build
+.env

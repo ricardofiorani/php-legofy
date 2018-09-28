@@ -133,7 +133,7 @@ class Legofy
             $color->getHex()
         )->insert(
             (clone $this->getBrick())->colorize(
-            // Picked color subtracted by the average brick color to avoid the image getting brighter
+                // Picked color subtracted by the average brick color to avoid the image getting brighter
                 ($colorRgba[0] - $brickColorRgba[1]) / 2.55,
                 ($colorRgba[1] - $brickColorRgba[1]) / 2.55,
                 ($colorRgba[2] - $brickColorRgba[2]) / 2.55

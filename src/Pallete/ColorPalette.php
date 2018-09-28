@@ -269,7 +269,6 @@ class ColorPalette implements LegoPaletteInterface
         $distances = [];
 
         foreach ($this->palette as $colorIdentifier => $colorSchema) {
-
             $distance =
                 abs($colorSchema[0] - $color->r) +
                 abs($colorSchema[1] - $color->g) +
