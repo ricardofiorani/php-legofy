@@ -33,7 +33,7 @@ class MainIntegrationTest extends TestCase
 
         TestCase::assertInstanceOf(Image::class, $result);
 
-        $this->uploadToImgur($result);
+        var_dump($this->uploadToImgur($result));
 
         TestCase::assertEquals(
             '83d6270ee6470a3a93641e06485181ef',
@@ -53,7 +53,7 @@ class MainIntegrationTest extends TestCase
 
         TestCase::assertInstanceOf(Image::class, $result);
 
-        fwrite(STDOUT, print_r($this->uploadToImgur($result), TRUE));
+        var_dump($this->uploadToImgur($result));
 
         TestCase::assertEquals(
             '5e1cdcdb0efedbc8e38bcf74e10f5378',
@@ -74,8 +74,6 @@ class MainIntegrationTest extends TestCase
             'type' => 'base64',
         ];
 
-        $result = $this->client->api('image')->upload($imageData);
-
-        return $result['link'];
+        return $this->client->api('image')->upload($imageData);
     }
 }
