@@ -12,6 +12,10 @@ class Legofy
 {
     private $brick;
     private $brickAverageColor;
+
+    /**
+     * @var LegoPaletteInterface
+     */
     private $palette;
 
     public function __construct($brickResource = null, LegoPaletteInterface $palette = null)
