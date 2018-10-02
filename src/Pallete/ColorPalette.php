@@ -274,7 +274,6 @@ class ColorPalette implements LegoPaletteInterface
         $colorArray = $color->getArray();
 
         foreach (self::PALETTE as $colorIdentifier => $colorSchema) {
-
             $rDistance = $colorSchema[0] - $colorArray[0];
             $gDistance = $colorSchema[1] - $colorArray[1];
             $bDistance = $colorSchema[2] - $colorArray[2];
