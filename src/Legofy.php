@@ -10,8 +10,29 @@ use RicardoFiorani\Legofy\Pallete\LegoPaletteInterface;
 
 class Legofy
 {
+    /**
+     * @var Image
+     */
     private $brick;
+
+    /**
+     * @var AbstractColor
+     */
     private $brickAverageColor;
+
+    /**
+     * @var int
+     */
+    private $brickWidth;
+
+    /**
+     * @var int
+     */
+    private $brickHeight;
+
+    /**
+     * @var LegoPaletteInterface
+     */
     private $palette;
 
     public function __construct($brickResource = null, LegoPaletteInterface $palette = null)
@@ -25,7 +46,9 @@ class Legofy
 
     public function setBrick(Image $brick): self
     {
-        $this->brick = $brick;
+        $this->brick       = $brick;
+        $this->brickWidth  = $brick->getWidth();
+        $this->brickHeight = $brick->getHeight();
 
         return $this;
     }
@@ -51,31 +74,25 @@ class Legofy
     {
         $image = ImageManagerStatic::make($resource);
 
-        // Apply resolution multipler
-        $image->resize(
-            $image->getWidth() * $resolutionMultipler,
-            $image->getHeight() * $resolutionMultipler
-        );
-
         // Calculate how many bricks fit in the image
-        $amountOfBricksX = round($image->getWidth() / $this->getBrick()->getWidth());
-        $amountOfBricksY = round($image->getHeight() / $this->getBrick()->getHeight());
+        $amountOfBricksX = round($image->getWidth() * $resolutionMultipler / $this->brickWidth);
+        $amountOfBricksY = round($image->getHeight() * $resolutionMultipler / $this->brickHeight);
 
         // Resize to the rounded value relative to the brick size
         $image->resize(
-            $amountOfBricksX * $this->getBrick()->getWidth(),
-            $amountOfBricksY * $this->getBrick()->getHeight()
+            $amountOfBricksX * $this->brickWidth,
+            $amountOfBricksY * $this->brickHeight
         );
 
         $canvas = ImageManagerStatic::canvas(
-            $amountOfBricksX * $this->getBrick()->getWidth(),
-            $amountOfBricksY * $this->getBrick()->getHeight()
+            $amountOfBricksX * $this->brickWidth,
+            $amountOfBricksY * $this->brickHeight
         );
 
         foreach (range(0, $amountOfBricksX) as $x) {
             foreach (range(0, $amountOfBricksY) as $y) {
-                $positionX = $x * $this->getBrick()->getWidth();
-                $positionY = $y * $this->getBrick()->getHeight();
+                $positionX = $x * $this->brickWidth;
+                $positionY = $y * $this->brickHeight;
 
                 if ($positionX == $image->getWidth()) {
                     $positionX--;
@@ -85,6 +102,7 @@ class Legofy
                     $positionY--;
                 }
 
+                /** @var AbstractColor $color */
                 $color = $image->pickColor($positionX, $positionY, 'object');
 
                 if ($legoColorsOnly) {
@@ -96,8 +114,8 @@ class Legofy
                 $canvas->insert(
                     $colorizedBrick,
                     '',
-                    ($x * $this->getBrick()->getWidth()) - $this->getBrick()->getWidth(),
-                    ($y * $this->getBrick()->getHeight()) - $this->getBrick()->getHeight()
+                    ($x * $this->brickWidth) - $this->brickWidth,
+                    ($y * $this->brickHeight) - $this->brickHeight
                 );
             }
         }
@@ -112,9 +130,9 @@ class Legofy
         }
 
         return $this->brickAverageColor = (clone $this->getBrick())
-            ->pixelate($this->getBrick()->getWidth())
+            ->pixelate($this->brickWidth)
             ->blur(50)
-            ->pickColor($this->getBrick()->width() / 2, $this->getBrick()->getHeight() / 2, 'obj');
+            ->pickColor($this->brickWidth / 2, $this->brickHeight / 2, 'obj');
     }
 
     private function colorizeBrick(AbstractColor $color): Image
@@ -126,7 +144,7 @@ class Legofy
 
         return ImageManagerStatic::canvas(
             $this->getBrick()->getWidth(),
-            $this->getBrick()->getHeight(),
+            $this->brickHeight,
             $color->getHex('')
         )->insert(
             (clone $this->getBrick())->colorize(
