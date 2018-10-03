@@ -135,7 +135,7 @@ class Legofy
         $brickColorRgba = $brickColor->getArray();
 
         return ImageManagerStatic::canvas(
-            $this->getBrick()->getWidth(),
+            $this->brickWidth,
             $this->brickHeight,
             $color->getHex('')
         )->insert(
