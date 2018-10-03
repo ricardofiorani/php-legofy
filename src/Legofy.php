@@ -75,14 +75,11 @@ class Legofy
         $image = ImageManagerStatic::make($resource);
 
         // Calculate how many bricks fit in the image
-        $amountOfBricksX = round($image->getWidth() * $resolutionMultipler / $this->brickWidth);
-        $amountOfBricksY = round($image->getHeight() * $resolutionMultipler / $this->brickHeight);
+        $amountOfBricksX = (int) round($image->getWidth() * $resolutionMultipler / $this->brickWidth);
+        $amountOfBricksY = (int) round($image->getHeight() * $resolutionMultipler / $this->brickHeight);
 
         // Resize to the rounded value relative to the brick size
-        $image->resize(
-            $amountOfBricksX * $this->brickWidth,
-            $amountOfBricksY * $this->brickHeight
-        );
+        $image->resize($amountOfBricksX, $amountOfBricksY);
 
         $canvas = ImageManagerStatic::canvas(
             $amountOfBricksX * $this->brickWidth,
@@ -91,11 +88,9 @@ class Legofy
 
         for ($x = 0; $x < $amountOfBricksX; ++$x) {
             for ($y = 0; $y < $amountOfBricksY; ++$y) {
-                $positionX = $x * $this->brickWidth;
-                $positionY = $y * $this->brickHeight;
 
                 /** @var AbstractColor $color */
-                $color = $image->pickColor($positionX, $positionY, 'object');
+                $color = $image->pickColor($x, $y, "object");
 
                 if ($legoColorsOnly) {
                     $color = $this->palette->pickClosestColor($color);
@@ -117,7 +112,7 @@ class Legofy
 
     private function getAverageBrickColor(): AbstractColor
     {
-        if (false === is_null($this->brickAverageColor)) {
+        if (null !== $this->brickAverageColor) {
             return $this->brickAverageColor;
         }
 
