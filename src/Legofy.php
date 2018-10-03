@@ -89,18 +89,10 @@ class Legofy
             $amountOfBricksY * $this->brickHeight
         );
 
-        foreach (range(0, $amountOfBricksX) as $x) {
-            foreach (range(0, $amountOfBricksY) as $y) {
+        for ($x = 0; $x < $amountOfBricksX; ++$x) {
+            for ($y = 0; $y < $amountOfBricksY; ++$y) {
                 $positionX = $x * $this->brickWidth;
                 $positionY = $y * $this->brickHeight;
-
-                if ($positionX == $image->getWidth()) {
-                    $positionX--;
-                }
-
-                if ($positionY == $image->getHeight()) {
-                    $positionY--;
-                }
 
                 /** @var AbstractColor $color */
                 $color = $image->pickColor($positionX, $positionY, 'object');
@@ -114,8 +106,8 @@ class Legofy
                 $canvas->insert(
                     $colorizedBrick,
                     '',
-                    ($x * $this->brickWidth) - $this->brickWidth,
-                    ($y * $this->brickHeight) - $this->brickHeight
+                    $x * $this->brickWidth,
+                    $y * $this->brickHeight
                 );
             }
         }
