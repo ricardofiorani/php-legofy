@@ -12,7 +12,11 @@
     },
     "autoload": {
         "psr-4": {
-            "RicardoFiorani\\Legofy\\": "src",
+            "RicardoFiorani\\Legofy\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Tests\\RicardoFiorani\\": "tests"
         }
     },
