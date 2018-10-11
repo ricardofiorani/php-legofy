@@ -6,7 +6,7 @@ use Intervention\Image\AbstractColor;
 
 class ColorPalette implements LegoPaletteInterface
 {
-    private $palette = [
+    private const PALETTE = [
         '024' => [
             254,
             196,
@@ -264,28 +264,30 @@ class ColorPalette implements LegoPaletteInterface
         ],
     ];
 
+    /**
+     * @link https://stackoverflow.com/questions/4485229/rgb-to-closest-predefined-color
+     */
     public function pickClosestColor(AbstractColor $color): AbstractColor
     {
         $distances = [];
 
         $colorArray = $color->getArray();
 
-        foreach ($this->palette as $colorIdentifier => $colorSchema) {
-            $distance =
-                abs($colorSchema[0] - $colorArray[0]) +
-                abs($colorSchema[1] - $colorArray[1]) +
-                abs($colorSchema[2] - $colorArray[2]);
+        foreach (self::PALETTE as $colorIdentifier => $colorSchema) {
+            $rDistance = $colorSchema[0] - $colorArray[0];
+            $gDistance = $colorSchema[1] - $colorArray[1];
+            $bDistance = $colorSchema[2] - $colorArray[2];
 
-            $distances[$distance] = [$colorSchema[0], $colorSchema[1], $colorSchema[2]];
+            $distance = ($rDistance * .299) ** 2 + ($gDistance * .587) ** 2 + ($bDistance * .114) ** 2;
+
+            $distances[$colorIdentifier] = $distance;
         }
 
-        ksort($distances);
+        asort($distances);
 
-        $colorFound = reset($distances);
+        $colorIdentifier = array_keys($distances)[0];
 
-        list($r, $g, $b) = $colorFound;
-
-        $color->initFromRgb($r, $g, $b);
+        $color->initFromRgb(...self::PALETTE[$colorIdentifier]);
 
         return $color;
     }
