@@ -2,8 +2,6 @@
 
 namespace Tests\RicardoFiorani\Integration;
 
-use Dotenv\Dotenv;
-use Imgur\Client;
 use Intervention\Image\Image;
 use PHPUnit\Framework\TestCase;
 use RicardoFiorani\Legofy\Legofy;
