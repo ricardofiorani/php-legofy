@@ -4,8 +4,6 @@
 [![License](https://poser.pugx.org/ricardofiorani/php-legofy/license.png)](https://packagist.org/packages/ricardofiorani/php-legofy)
 [![Total Downloads](https://poser.pugx.org/ricardofiorani/php-legofy/d/total.png)](https://packagist.org/packages/ricardofiorani/php-legofy)
 [![Coding Standards](https://img.shields.io/badge/cs-PSR--4-yellow.svg)](https://github.com/php-fig-rectified/fig-rectified-standards)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ricardofiorani/php-legofy/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ricardofiorani/php-legofy/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/ricardofiorani/php-legofy/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ricardofiorani/php-legofy/?branch=master)
 
 ### What is this ?
 PHP Legofy is a PHP package that takes a static image and makes it so that it looks as if it was built out of LEGO.  
@@ -20,7 +18,7 @@ Into this:
 [lego-beer]: ./assets/examples/lego-beer.jpeg
 
 ### Requirements
-* PHP 7.1 (or above)
+* PHP ^7.1 || ^8.0
 * GD or ImageMagick
 > I tested it with GD only but I'm trusting intervention/image that this will work on ImageMagick as well.
 
